@@ -5,28 +5,32 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Rational;
 import android.view.Display;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.SeekBar;
+import android.widget.MediaController;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class VideoPlayerActivity extends AppCompatActivity {
+
+
+
     Button button;
     ActionBar actionBar;
 
+
+
     VideoView videoView;
-    ImageView imageView;
-    SeekBar seekBar;
+    //ImageView imageView;
+    //SeekBar seekBar;
     String str_video_url;
-    boolean isPlay=false;
-    Handler handler;
+    //boolean isPlay=false;
+    //Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,36 +75,48 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
     }
 
+
     private void init(){
+
         videoView=(VideoView)findViewById(R.id.videoView);
 
-        imageView=(ImageView)findViewById(R.id.toggleButton);
+        //imageView=(ImageView)findViewById(R.id.toggleButton);
 
-        seekBar=(SeekBar)findViewById(R.id.seekBar);
+        //seekBar=(SeekBar)findViewById(R.id.seekBar);
 
         str_video_url=getIntent().getStringExtra("video");
 
+        MediaController mediaController= new MediaController(this);
+        mediaController.setAnchorView(videoView);
+        videoView.setMediaController(mediaController);
+
         videoView.setVideoPath(str_video_url);
 
-        handler=new Handler();
+
+
+       // handler=new Handler();
 
         videoView.start();
 
-        isPlay=true;
+        /*isPlay=true;
 
         imageView.setImageResource(R.drawable.pausebutton);
 
-        updateSeekBar();
+        updateSeekBar();*/
 
 
 
 
     }
-    private void updateSeekBar(){
+
+
+    /*private void updateSeekBar(){
         handler.postDelayed(updateTimeTask,100);
 
-    }
-    public Runnable updateTimeTask=new Runnable() {
+    }*/
+
+
+   /* public Runnable updateTimeTask=new Runnable() {
         @Override
         public void run() {
             seekBar.setProgress(videoView.getCurrentPosition());
@@ -125,9 +141,11 @@ public class VideoPlayerActivity extends AppCompatActivity {
                 }
             });
         }
-    };
+    };*/
 
-    public void toggle_method(View v){
+
+
+    /*public void toggle_method(View v){
         if(isPlay==true){
             videoView.pause();
             isPlay=false;
@@ -139,17 +157,36 @@ public class VideoPlayerActivity extends AppCompatActivity {
             isPlay=true;
             imageView.setImageResource(R.drawable.pausebutton);
         }
-    }
+    }*/
 
-    /*ActionBar actionBar;
+    //------------------------------------------------------------------------------------------------------
+
+
+    /*
+    ActionBar actionBar;
+
     Button button;
-    String str_video_path;
+    String str_video_url;
+    VideoView videoView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        str_video_path=getIntent().getStringExtra("video");
+
+        str_video_url=getIntent().getStringExtra("video");
+
         actionBar=getSupportActionBar();
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println(str_video_url);
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+
         button=(Button)findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,18 +211,19 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
 
         String fileName="video";
-        String filePlace=str_video_path;
-        VideoView videoView=(VideoView)findViewById(R.id.videoView);
+        String filePlace=str_video_url;
+
+        videoView=(VideoView) findViewById(R.id.videoView);
 
         MediaController mediaController= new MediaController(this);
         mediaController.setAnchorView(videoView);
 
         // can also set the URI to local video with Environment.getExternalStorageDirectory().getPath()+"/media/1.mp4"
         //Uri uri= Uri.parse("https://streamable.com/vpghe");
-        Uri uri= Uri.parse(filePlace);
+        Uri uri= Uri.parse(Environment.getExternalStorageDirectory()+str_video_url);
         videoView.setMediaController(mediaController);
         videoView.setVideoURI(uri);
-        //videoView.requestFocus();
+        videoView.requestFocus();
         videoView.start();
     }
 
